@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Bigfoot War Game
+
+   A card game based on the classic game War, featuring different types of Bigfoot creatures.
+
+   ## Features
+   - Play against a computer opponent
+   - Choose from various Bigfoot types, each with unique abilities
+   - Unlock new Bigfoot types as you progress
+   - Implemented using Next.js, React, and TypeScript
+   - Uses Vercel Edge Functions for backend logic
+
+   ## Getting Started
+   1. Clone the repository
+   2. Install dependencies: `npm install`
+   3. Run the development server: `npm run dev`
+   4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+   ## Technologies Used
+   - Next.js
+   - React
+   - TypeScript
+   - Tailwind CSS
+   - Vercel Edge Functions
+
+   ## License
+   This project is licensed under the MIT License.
