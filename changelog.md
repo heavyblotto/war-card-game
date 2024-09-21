@@ -329,3 +329,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 - Updated project documentation for open-source release
+
+## [1.0.1] - 2023-05-03
+
+### Fixed
+- Updated API routes to use correct imports for Edge Runtime in Next.js 14
+- Removed deprecated `@vercel/edge` imports from API routes
+
+### Changed
+- Modified `game-stats.ts` and `leaderboard.ts` to use `NextRequest` from `next/server`
+
+### Documentation
+- Updated inline comments in API routes to reflect changes in Edge Runtime usage
+
+## [1.0.2] - 2023-05-04
+
+### Fixed
+- Updated `validate-game-state.ts` API route to use correct imports for Edge Runtime in Next.js 14
+- Removed deprecated `@vercel/edge` imports from `validate-game-state.ts`
+
+### Changed
+- Modified `validate-game-state.ts` to use `NextRequest` from `next/server`
+
+### Documentation
+- Updated inline comments in `validate-game-state.ts` to reflect changes in Edge Runtime usage

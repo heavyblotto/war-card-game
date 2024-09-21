@@ -1,13 +1,18 @@
-import { EdgeFunction, EdgeContext } from '@vercel/edge';
+import type { NextRequest } from 'next/server';
 
 export const config = { runtime: 'edge' };
 
 type GameState = {
-  computerDeck: any[];
-  computerWinPile: any[];
+  computerDeck: Card[];
+  computerWinPile: Card[];
 };
 
-export default async function handler(req: Request, context: EdgeContext) {
+type Card = {
+  suit: string;
+  value: number;
+};
+
+export default async function handler(req: NextRequest) {
   const gameState: GameState = await req.json();
   
   const aiMove = determineAIMove(gameState);

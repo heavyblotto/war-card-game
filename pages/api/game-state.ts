@@ -1,4 +1,4 @@
-import { EdgeFunction, EdgeContext } from '@vercel/edge';
+import type { NextRequest } from 'next/server';
 
 export const config = { runtime: 'edge' };
 
@@ -32,7 +32,7 @@ function validateGameState(state: GameState): string | null {
   return null;
 }
 
-export default async function handler(req: Request, context: EdgeContext) {
+export default async function handler(req: NextRequest) {
   if (req.method === 'GET') {
     // In a real scenario, you'd fetch the game state from a database
     const gameState: GameState = {

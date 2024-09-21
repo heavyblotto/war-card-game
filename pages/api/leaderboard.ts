@@ -1,11 +1,11 @@
-import { EdgeFunction, EdgeContext } from '@vercel/edge';
+import type { NextRequest } from 'next/server';
 
 export const config = { runtime: 'edge' };
 
 // This is a mock implementation. In a real scenario, you'd integrate with a database.
 const leaderboard = new Map<string, number>();
 
-export default async function handler(req: Request, context: EdgeContext) {
+export default async function handler(req: NextRequest) {
   if (req.method === 'POST') {
     const { player, score } = await req.json();
     leaderboard.set(player, score);

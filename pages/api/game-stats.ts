@@ -1,4 +1,4 @@
-import { EdgeFunction, EdgeContext } from '@vercel/edge';
+import type { NextRequest } from 'next/server';
 
 export const config = { runtime: 'edge' };
 
@@ -12,7 +12,7 @@ type GameState = {
   roundsPlayed: number;
 };
 
-export default async function handler(req: Request, context: EdgeContext) {
+export default async function handler(req: NextRequest) {
   const gameState: GameState = await req.json();
   
   const stats = {

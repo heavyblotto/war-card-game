@@ -71,6 +71,7 @@ export default function BigfootWar() {
     setGameState(newGameState);
     setAvailableBigfoots(availableBigfoots);
     updateGameState(newGameState);
+    return newGameState;
   };
 
   // Function to create a standard deck of 52 cards
@@ -108,7 +109,7 @@ export default function BigfootWar() {
     if (!gameState) return;
 
     setGameState(prevState => {
-      if (!prevState) return prevState;
+      if (!prevState) return null;
 
       let newPlayerDeck = [...prevState.playerDeck];
       let newComputerDeck = [...prevState.computerDeck];
@@ -119,7 +120,12 @@ export default function BigfootWar() {
       // Check if player's deck is empty and shuffle win pile if necessary
       if (newPlayerDeck.length === 0) {
         if (newPlayerWinPile.length === 0) {
-          return { ...prevState, gameStatus: 'Game over! Computer wins!', playerCard: null, computerCard: null };
+          return {
+            ...prevState,
+            gameStatus: 'Game over! Computer wins!',
+            playerCard: null,
+            computerCard: null
+          };
         }
         newPlayerDeck = fisherYatesShuffle(newPlayerWinPile);
         newPlayerWinPile = [];
@@ -128,7 +134,12 @@ export default function BigfootWar() {
       // Check if computer's deck is empty and shuffle win pile if necessary
       if (newComputerDeck.length === 0) {
         if (newComputerWinPile.length === 0) {
-          return { ...prevState, gameStatus: 'Game over! Player wins!', playerCard: null, computerCard: null };
+          return {
+            ...prevState,
+            gameStatus: 'Game over! Player wins!',
+            playerCard: null,
+            computerCard: null
+          };
         }
         newComputerDeck = fisherYatesShuffle(newComputerWinPile);
         newComputerWinPile = [];
@@ -183,7 +194,7 @@ export default function BigfootWar() {
       
       if (totalCards !== 52) {
         console.error('Card count mismatch:', totalCards);
-        return initializeGame(); // Reset the game if card count is incorrect
+        return initializeGame();
       }
 
       updateGameState(newState);

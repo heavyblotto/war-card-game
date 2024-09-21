@@ -1,9 +1,25 @@
-import { EdgeFunction, EdgeContext } from '@vercel/edge';
+import type { NextRequest } from 'next/server';
 
 export const config = { runtime: 'edge' };
 
-export default async function handler(req: Request, context: EdgeContext) {
-  const gameState = await req.json();
+type Card = {
+  suit: string;
+  value: number;
+};
+
+type GameState = {
+  playerDeck: Card[];
+  computerDeck: Card[];
+  playerWinPile: Card[];
+  computerWinPile: Card[];
+  warPile: Card[];
+  gameStatus: string;
+  playerCard: Card | null;
+  computerCard: Card | null;
+};
+
+export default async function handler(req: NextRequest) {
+  const gameState: GameState = await req.json();
   
   const totalCards = gameState.playerDeck.length + gameState.computerDeck.length + 
                      gameState.playerWinPile.length + gameState.computerWinPile.length + 
