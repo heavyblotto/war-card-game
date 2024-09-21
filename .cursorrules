@@ -1,0 +1,39 @@
+{
+  "rules": [
+    {
+      "name": "Verbose Code Documentation",
+      "pattern": "\\.(js|jsx|ts|tsx)$",
+      "message": "Ensure comprehensive documentation for all code files:",
+      "checklist": [
+        "Add detailed comments explaining complex logic",
+        "Include @param and @return JSDoc annotations for functions",
+        "Provide examples of usage where appropriate",
+        "Add developer notes prefixed with 'DEV NOTE:'",
+        "Include AI-specific notes prefixed with 'AI NOTE:' where relevant",
+        "Add layperson explanations prefixed with 'LAYPERSON NOTE:' for key concepts"
+      ]
+    },
+    {
+      "name": "Changelog Updates",
+      "pattern": "changelog\\.md$",
+      "message": "Keep the changelog up to date with all significant changes:",
+      "checklist": [
+        "Add new entries under the appropriate version number",
+        "Use semantic versioning (MAJOR.MINOR.PATCH)",
+        "Categorize changes as Added, Changed, Deprecated, Removed, Fixed, or Security",
+        "Provide clear and concise descriptions of changes",
+        "Include references to relevant issue or pull request numbers",
+        "Update the date for the latest version"
+      ]
+    },
+    {
+      "name": "Changelog Check",
+      "pattern": "\\.(js|jsx|ts|tsx|css|scss|md)$",
+      "message": "Ensure significant changes are reflected in the changelog:",
+      "checklist": [
+        "If this change is significant, add an entry to changelog.md",
+        "Update the version number in changelog.md if necessary"
+      ]
+    }
+  ]
+}
