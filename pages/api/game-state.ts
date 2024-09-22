@@ -1,4 +1,6 @@
 import type { NextRequest } from 'next/server';
+import { BigfootType, Attack, bigfootTypes } from '../../utils/bigfootTypes';
+import { GameConfig, defaultGameConfig } from '../../utils/gameConfig';
 
 export const config = { runtime: 'edge' };
 
@@ -7,24 +9,35 @@ type Card = {
   value: number;
 };
 
-type GameState = {
+type EnhancedGameState = {
   playerDeck: Card[];
-  computerDeck: Card[];
+  opponentDeck: Card[];
   playerWinPile: Card[];
-  computerWinPile: Card[];
+  opponentWinPile: Card[];
   warPile: Card[];
   gameStatus: string;
   playerCard: Card | null;
-  computerCard: Card | null;
+  opponentCard: Card | null;
+  playerBigfoot: BigfootType;
+  opponentBigfoot: BigfootType;
+  playerHitPoints: number;
+  opponentHitPoints: number;
+  unlockedBigfoots: string[];
+  config: GameConfig;
+  roundsPlayed: number;
 };
 
-function validateGameState(state: GameState): string | null {
-  const totalCards = state.playerDeck.length + state.computerDeck.length + 
-                     state.playerWinPile.length + state.computerWinPile.length + 
+function validateGameState(state: EnhancedGameState): string | null {
+  const totalCards = state.playerDeck.length + state.opponentDeck.length + 
+                     state.playerWinPile.length + state.opponentWinPile.length + 
                      state.warPile.length;
   
-  if (totalCards !== 52) {
+  if (totalCards !== 2 * state.config.deckSizePerPlayer) {
     return `Invalid card count: ${totalCards}`;
+  }
+
+  if (state.playerHitPoints < 0 || state.opponentHitPoints < 0) {
+    return 'Invalid hit points';
   }
 
   // Add more validation checks as needed
@@ -35,22 +48,29 @@ function validateGameState(state: GameState): string | null {
 export default async function handler(req: NextRequest) {
   if (req.method === 'GET') {
     // In a real scenario, you'd fetch the game state from a database
-    const gameState: GameState = {
+    const gameState: EnhancedGameState = {
       playerDeck: [],
-      computerDeck: [],
+      opponentDeck: [],
       playerWinPile: [],
-      computerWinPile: [],
+      opponentWinPile: [],
       warPile: [],
       gameStatus: 'Game not started',
       playerCard: null,
-      computerCard: null,
+      opponentCard: null,
+      playerBigfoot: bigfootTypes[0], // Use the first Bigfoot type as default
+      opponentBigfoot: bigfootTypes[1], // Use the second Bigfoot type as default
+      playerHitPoints: bigfootTypes[0].maxHitPoints,
+      opponentHitPoints: bigfootTypes[1].maxHitPoints,
+      unlockedBigfoots: ['Sasquatch'],
+      config: defaultGameConfig,
+      roundsPlayed: 0,
     };
     return new Response(JSON.stringify(gameState), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } else if (req.method === 'POST') {
-    const newState: GameState = await req.json();
+    const newState: EnhancedGameState = await req.json();
     const validationError = validateGameState(newState);
     if (validationError) {
       return new Response(JSON.stringify({ message: 'Invalid game state', error: validationError }), {

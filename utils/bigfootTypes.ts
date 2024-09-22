@@ -1,3 +1,9 @@
+export type Attack = {
+  name: string;
+  damage: number;
+  cardValue: number;
+};
+
 export type BigfootType = {
   name: string;
   category: 'Dwarf' | 'Giant' | 'Squatch';
@@ -8,20 +14,11 @@ export type BigfootType = {
   agility: number;
   intelligence: number;
   unlockCondition: string;
+  maxHitPoints: number;
+  attacks: Attack[];
 };
 
 export const bigfootTypes: BigfootType[] = [
-  {
-    name: "Agogwe",
-    category: "Dwarf",
-    location: "Tanzania, East Africa, Zimbabwe, Zaire, and Congo",
-    habitat: "Forests and jungle",
-    specialAbility: "Jungle Camouflage",
-    strength: 5,
-    agility: 8,
-    intelligence: 6,
-    unlockCondition: "Win 5 games"
-  },
   {
     name: "Sasquatch",
     category: "Squatch",
@@ -31,94 +28,14 @@ export const bigfootTypes: BigfootType[] = [
     strength: 9,
     agility: 7,
     intelligence: 7,
-    unlockCondition: "Starter Bigfoot"
+    unlockCondition: "Starter Bigfoot",
+    maxHitPoints: 100,
+    attacks: [
+      { name: "Mighty Swing", damage: 20, cardValue: 14 },
+      { name: "Tree Throw", damage: 15, cardValue: 13 },
+      { name: "Ground Pound", damage: 10, cardValue: 12 },
+      { name: "Intimidating Roar", damage: 5, cardValue: 11 },
+    ]
   },
-  {
-    name: "Yeti",
-    category: "Giant",
-    location: "Himalayas",
-    habitat: "Snowy mountain",
-    specialAbility: "Blizzard Summoning",
-    strength: 10,
-    agility: 6,
-    intelligence: 6,
-    unlockCondition: "Win 20 games"
-  },
-  {
-    name: "Orang Pendek",
-    category: "Dwarf",
-    location: "Sumatra",
-    habitat: "Jungle mountains",
-    specialAbility: "Tree Climbing",
-    strength: 6,
-    agility: 9,
-    intelligence: 8,
-    unlockCondition: "Win 10 games"
-  },
-  {
-    name: "Skunk Ape",
-    category: "Squatch",
-    location: "US Florida",
-    habitat: "Swamp",
-    specialAbility: "Noxious Odor",
-    strength: 7,
-    agility: 6,
-    intelligence: 5,
-    unlockCondition: "Win 15 games"
-  },
-  {
-    name: "Genoskwa",
-    category: "Giant",
-    location: "North America",
-    habitat: "Valley",
-    specialAbility: "Stone Skin",
-    strength: 10,
-    agility: 4,
-    intelligence: 5,
-    unlockCondition: "Win 25 games"
-  },
-  {
-    name: "Yowie",
-    category: "Squatch",
-    location: "Australia",
-    habitat: "Underground riverside",
-    specialAbility: "Burrowing",
-    strength: 8,
-    agility: 7,
-    intelligence: 6,
-    unlockCondition: "Win 30 games"
-  },
-  {
-    name: "Momo",
-    category: "Squatch",
-    location: "Eastern US",
-    habitat: "Abandoned shack",
-    specialAbility: "Intimidating Roar",
-    strength: 8,
-    agility: 6,
-    intelligence: 5,
-    unlockCondition: "Win 35 games"
-  },
-  {
-    name: "Kapre",
-    category: "Squatch",
-    location: "Philippines",
-    habitat: "Banyan tree",
-    specialAbility: "Smoke Screen",
-    strength: 7,
-    agility: 8,
-    intelligence: 8,
-    unlockCondition: "Win 40 games"
-  },
-  {
-    name: "Dzu-Teh",
-    category: "Giant",
-    location: "Himalayas",
-    habitat: "Snowy mountain",
-    specialAbility: "Avalanche Trigger",
-    strength: 9,
-    agility: 5,
-    intelligence: 7,
-    unlockCondition: "Win 45 games"
-  }
+  // Add more Bigfoot types with their attacks...
 ];

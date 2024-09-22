@@ -302,7 +302,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created a database of different Bigfoot types in `utils/bigfootTypes.ts`
 - Implemented Bigfoot selection feature for the player
 - Added random Bigfoot selection for the computer opponent
-- Introduced unlock conditions for different Bigfoot types
+- Introduced a new gameplay mechanic: players can choose to collect cards or attack their opponent
 
 ### Changed
 - Updated `BigfootWar` component to incorporate Bigfoot types
@@ -353,3 +353,229 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 - Updated inline comments in `validate-game-state.ts` to reflect changes in Edge Runtime usage
+
+## [1.1.0] - 2023-05-05
+
+### Added
+- Implemented configurable game rules
+- Created `gameConfig.ts` to manage game configuration
+- Added UI elements to change game difficulty and toggle special abilities
+- Implemented placeholder functions for special abilities and unlocks
+
+### Changed
+- Modified `BigfootWar` component to use and update game configuration
+- Updated `drawCard` function to respect current game configuration
+
+### Game Mechanics
+- Added support for different win conditions ('allCards' and 'mostCards')
+- Implemented max rounds limit in game configuration
+- Prepared structure for special abilities and Bigfoot type unlocks
+
+### Documentation
+- Updated project documentation to reflect new configurable game rules
+
+## [1.2.0] - 2023-05-06
+
+### Changed
+- Updated game rules: each Bigfoot now starts with their own deck of 52 cards
+- Modified `gameConfig.ts` to use `deckSizePerPlayer` instead of `initialDeckSize`
+- Updated `BigfootWar` component to create and shuffle separate decks for each player
+- Modified card count validation in API routes to account for the new total card count
+
+### Game Mechanics
+- Doubled the total number of cards in play (104 cards total, 52 per player)
+- Updated `createDeck` function to generate the correct number of cards based on `deckSizePerPlayer`
+
+### API
+- Updated `game-state.ts` and `validate-game-state.ts` to validate the new total card count
+
+### Documentation
+- Updated project documentation to reflect the new game rules and card distribution
+
+## [1.3.0] - 2023-05-07
+
+### Added
+- Implemented hit points and attacks for Bigfoot types
+- Added UI elements to display hit points and available attacks
+- Introduced a new gameplay mechanic: players can choose to collect cards or attack their opponent
+
+### Changed
+- Updated `BigfootWar` component to handle hit points and attacks
+- Modified game state to include hit points for player and computer Bigfoot
+- Updated UI to display hit points and attack options
+
+### Game Mechanics
+- Added a new win condition: defeating the opponent's Bigfoot
+- Implemented a variety of attacks tied to specific card values
+
+### UI
+- Added a new gameplay option: attack or collect cards
+- Displayed available attacks and their effects
+
+### Documentation
+- Updated project documentation to reflect the new gameplay mechanics
+
+## [1.4.0] - 2023-05-08
+
+### Added
+- Implemented animated card flips and movements using Framer Motion
+
+### Changed
+- Improved code readability in the `BigfootWar` component
+
+### Documentation
+- Enhanced in-code documentation for easier maintenance and onboarding of new developers
+
+## [1.5.0] - 2023-05-09
+
+### Added
+- Created a `docs` directory for project documentation
+- Added comprehensive `project_documentation.md` file explaining various aspects of the project
+- Included sections on tech stack, architecture, game logic, state management, API reference, integration, deployment, data dictionary, and glossary in the documentation
+
+### Documentation
+- Improved project documentation for easier onboarding and maintenance
+
+## [1.5.1] - 2023-05-10
+
+### Fixed
+- Resolved ESLint configuration error by updating `.eslintrc.json`
+- Fixed type error in `pages/api/game-state.ts` by providing complete `EnhancedGameState` object
+- Ensured all API routes use correct types and provide default values where necessary
+
+### Changed
+- Updated `pages/api/game-state.ts` to use imported `bigfootTypes` and `defaultGameConfig` for initialization
+- Improved error handling and type safety in API routes
+
+### Development
+- Enhanced development experience by resolving linting and type checking issues
+- Updated game rules: each Bigfoot now starts with their own deck of 52 cards
+- Modified `gameConfig.ts` to use `deckSizePerPlayer` instead of `initialDeckSize`
+- Updated `BigfootWar` component to create and shuffle separate decks for each player
+- Modified card count validation in API routes to account for the new total card count
+
+### Game Mechanics
+- Doubled the total number of cards in play (104 cards total, 52 per player)
+- Updated `createDeck` function to generate the correct number of cards based on `deckSizePerPlayer`
+
+### API
+- Updated `game-state.ts` and `validate-game-state.ts` to validate the new total card count
+
+### Documentation
+- Updated project documentation to reflect the new game rules and card distribution
+
+## [1.5.2] - 2023-05-11
+
+### Changed
+- Simplified the BigfootWar component to focus on core game mechanics
+- Removed avatar images and complex UI elements temporarily
+- Kept advanced functionality in comments for future implementation
+
+### Fixed
+- Ensured basic game logic (card drawing, comparison, and pile management) is working correctly
+
+### TODO
+- Implement war logic for tied rounds
+- Add attack mechanic when a player wins a round
+- Integrate leaderboard functionality with backend
+- Implement Bigfoot type selection and unlocking system
+- Add special abilities for each Bigfoot type
+- Improve UI with animations and better visual feedback
+
+## [1.5.3] - 2023-05-12
+
+### Changed
+- Simplified the BigfootWar component to focus on core game mechanics
+- Removed avatar images and complex UI elements temporarily
+- Kept advanced functionality in comments for future implementation
+
+### Fixed
+- Ensured basic game logic (card drawing, comparison, and pile management) is working correctly
+
+### TODO
+- Implement war logic for tied rounds
+- Add attack mechanic when a player wins a round
+- Integrate leaderboard functionality with backend
+- Implement Bigfoot type selection and unlocking system
+- Add special abilities for each Bigfoot type
+- Improve UI with animations and better visual feedback
+
+## [1.5.4] - 2023-05-13
+
+### Fixed
+- Resolved runtime error caused by undefined `computerBigfoot`
+- Ensured proper initialization of both `playerBigfoot` and `computerBigfoot`
+
+### Added
+- Introduced `defaultBigfoot` as a fallback to prevent errors if bigfoot types are not loaded
+
+### Changed
+- Updated `initializeGame` function to use fallback bigfoot type if needed
+- Improved error handling in bigfoot type assignment
+
+### Development
+- Enhanced component stability by adding safeguards against undefined bigfoot types
+
+## [1.5.5] - 2023-05-14
+
+### Added
+- Implemented war logic when cards tie
+- Created `initiateWar` function to handle war scenarios
+- Added recursive war handling for multiple ties
+
+### Changed
+- Updated `drawCard` function to use the new war logic
+- Modified game state to better handle war scenarios
+
+### Game Mechanics
+- Introduced proper war mechanics with face-down cards
+- Improved game-ending conditions during war scenarios
+
+### TODO
+- Add the attack mechanic when a player wins a round
+- Implement the leaderboard functionality
+- Add more Bigfoot types and the ability to choose/unlock them
+- Implement special abilities for each Bigfoot type
+- Add animations and improve the UI
+
+## [1.5.6] - 2023-05-15
+
+### Added
+- Implemented a more visually appealing UI for the Bigfoot War game
+- Added styled card representations
+- Introduced health bars for both player and computer
+
+### Changed
+- Updated the layout to clearly separate player and computer information
+- Improved button styling and overall game aesthetics
+- Enhanced the game status display
+
+### UI/UX
+- Added a green background to the game area for a more immersive feel
+- Implemented responsive design for better mobile experience
+- Improved readability with better contrast and larger font sizes
+
+### Styling
+- Utilized Tailwind CSS classes for consistent and responsive design
+- Added subtle animations to buttons for better user feedback
+
+## [1.6.0] - 2023-05-16
+
+### Added
+- Implemented a more visually appealing UI for the Bigfoot War game
+- Added styled card representations
+- Introduced health bars for both player and computer
+
+### Changed
+- Updated the layout to clearly separate player and computer information
+- Improved button styling and overall game aesthetics
+- Enhanced the game status display
+
+### UI/UX
+- Added a green background to the game area for a more immersive feel
+- Implemented responsive design for better mobile experience
+- Improved readability with better contrast and larger font sizes
+
+### Styling
+- Utilized Tailwind CSS classes for consistent and responsive design
+- Added subtle animations to buttons for better user feedback
