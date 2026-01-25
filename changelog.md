@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-01-24
+
+### Fixed
+- Fixed critical runtime error in `initiateWar()` function where accessing `.value` on undefined cards caused crashes
+- Added null safety checks when decks run out during war scenarios
+- Fixed array index bounds checking in `renderWarScenario()` to prevent undefined access
+- Added defensive null checks in `handleRoundWin()` function to prevent errors when cards are null
+- Resolved React Hook dependency warning by wrapping `initializeGame` in `useCallback`
+
+### Changed
+- Improved error handling in war scenarios when decks become empty mid-war
+- Enhanced type safety by removing unsafe non-null assertions (`!`) and adding proper null checks
+- Refactored `initiateWar()` to properly validate card existence before accessing properties
+- Updated `renderWarScenario()` to safely handle array access with null coalescing
+
+### Development
+- All ESLint warnings resolved
+- Improved code robustness with defensive programming practices
+- Enhanced runtime error prevention for edge cases
+
 ## [0.1.0] - 2023-04-14
 
 ### Added

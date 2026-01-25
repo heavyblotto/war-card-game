@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BigfootType, bigfootTypes } from '../utils/bigfootTypes';
 import { GameConfig, defaultGameConfig } from '../utils/gameConfig';
 
@@ -28,11 +28,30 @@ type GameState = {
 const BigfootWar: React.FC = () => {
   const [gameState, setGameState] = useState<GameState | null>(null);
 
-  useEffect(() => {
-    initializeGame();
-  }, []);
+  const createDeck = (): Card[] => {
+    const suits = ['♠', '♥', '♦', '♣'];
+    const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    const deck: Card[] = [];
+    for (let i = 0; i < 2; i++) { // Create two full decks
+      for (const suit of suits) {
+        for (const value of values) {
+          deck.push({ suit, value });
+        }
+      }
+    }
+    return deck;
+  };
 
-  const initializeGame = () => {
+  const fisherYatesShuffle = (deck: Card[]): Card[] => {
+    const shuffled = [...deck];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  const initializeGame = useCallback(() => {
     const deck = createDeck();
     const shuffledDeck = fisherYatesShuffle(deck);
     const playerBigfoot = bigfootTypes[0];
@@ -57,30 +76,11 @@ const BigfootWar: React.FC = () => {
     };
 
     setGameState(newGameState);
-  };
+  }, []);
 
-  const createDeck = (): Card[] => {
-    const suits = ['♠', '♥', '♦', '♣'];
-    const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    const deck: Card[] = [];
-    for (let i = 0; i < 2; i++) { // Create two full decks
-      for (const suit of suits) {
-        for (const value of values) {
-          deck.push({ suit, value });
-        }
-      }
-    }
-    return deck;
-  };
-
-  const fisherYatesShuffle = (deck: Card[]): Card[] => {
-    const shuffled = [...deck];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
+  useEffect(() => {
+    initializeGame();
+  }, [initializeGame]);
 
   const drawCard = () => {
     if (!gameState) return;
@@ -143,7 +143,14 @@ const BigfootWar: React.FC = () => {
 
   const handleRoundWin = (state: GameState, winner: 'player' | 'opponent', playerChoice: 'attack' | 'collect' = 'collect'): GameState => {
     let newState = { ...state };
-    const winningCard = winner === 'player' ? newState.playerCard! : newState.opponentCard!;
+    
+    // Validate that cards exist before processing
+    if (!newState.playerCard || !newState.opponentCard) {
+      console.error('handleRoundWin called with null cards');
+      return newState;
+    }
+    
+    const winningCard = winner === 'player' ? newState.playerCard : newState.opponentCard;
     const winningBigfoot = winner === 'player' ? newState.playerBigfoot : newState.opponentBigfoot;
 
     if (winner === 'player') {
@@ -154,9 +161,9 @@ const BigfootWar: React.FC = () => {
         if (newState.opponentHP === 0) {
           newState.gameStatus = 'Game over! Player wins by defeating the opponent!';
         }
-        newState.discardPile = [...newState.discardPile, newState.playerCard!, newState.opponentCard!];
+        newState.discardPile = [...newState.discardPile, newState.playerCard, newState.opponentCard];
       } else {
-        newState.playerWinPile = [...newState.playerWinPile, newState.playerCard!, newState.opponentCard!];
+        newState.playerWinPile = [...newState.playerWinPile, newState.playerCard, newState.opponentCard];
         newState.gameStatus = playerChoice === 'attack' ? 'No attack available. Player collects the cards.' : 'Player collects the cards.';
       }
       // Clear the cards after player's turn
@@ -171,9 +178,9 @@ const BigfootWar: React.FC = () => {
         if (newState.playerHP === 0) {
           newState.gameStatus = 'Game over! Opponent wins by defeating the player!';
         }
-        newState.discardPile = [...newState.discardPile, newState.playerCard!, newState.opponentCard!];
+        newState.discardPile = [...newState.discardPile, newState.playerCard, newState.opponentCard];
       } else {
-        newState.opponentWinPile = [...newState.opponentWinPile, newState.playerCard!, newState.opponentCard!];
+        newState.opponentWinPile = [...newState.opponentWinPile, newState.playerCard, newState.opponentCard];
         newState.gameStatus = 'Opponent collects the cards.';
       }
       // Don't clear the cards after opponent's turn, so they remain visible
@@ -200,18 +207,36 @@ const BigfootWar: React.FC = () => {
         newState.gameStatus = `Game over! ${newState.playerDeck.length > 0 ? 'Player' : 'Opponent'} wins the war!`;
         return newState;
       }
-      const playerCard = newState.playerDeck.pop()!;
-      const opponentCard = newState.opponentDeck.pop()!;
+      const playerCard = newState.playerDeck.pop();
+      const opponentCard = newState.opponentDeck.pop();
+      if (!playerCard || !opponentCard) {
+        newState.gameStatus = `Game over! ${playerCard ? 'Player' : 'Opponent'} wins the war!`;
+        return newState;
+      }
       newState.warCards.player.push(playerCard);
       newState.warCards.opponent.push(opponentCard);
       newState.warPile.push(playerCard, opponentCard);
     }
 
-    newState.playerCard = newState.playerDeck.pop()!;
-    newState.opponentCard = newState.opponentDeck.pop()!;
-    newState.warCards.player.push(newState.playerCard);
-    newState.warCards.opponent.push(newState.opponentCard);
-    newState.warPile.push(newState.playerCard, newState.opponentCard);
+    // Check if we have enough cards for the final comparison
+    if (newState.playerDeck.length === 0 || newState.opponentDeck.length === 0) {
+      newState.gameStatus = `Game over! ${newState.playerDeck.length > 0 ? 'Player' : 'Opponent'} wins the war!`;
+      return newState;
+    }
+
+    const playerCard = newState.playerDeck.pop();
+    const opponentCard = newState.opponentDeck.pop();
+    
+    if (!playerCard || !opponentCard) {
+      newState.gameStatus = `Game over! ${playerCard ? 'Player' : 'Opponent'} wins the war!`;
+      return newState;
+    }
+
+    newState.playerCard = playerCard;
+    newState.opponentCard = opponentCard;
+    newState.warCards.player.push(playerCard);
+    newState.warCards.opponent.push(opponentCard);
+    newState.warPile.push(playerCard, opponentCard);
 
     if (newState.playerCard.value > newState.opponentCard.value) {
       newState.playerWinPile = [...newState.playerWinPile, ...newState.warPile];
@@ -261,30 +286,35 @@ const BigfootWar: React.FC = () => {
 
     return (
       <div className="flex flex-col items-center space-y-4">
-        {[...Array(warRounds)].map((_, roundIndex) => (
-          <div key={roundIndex} className="flex items-center justify-center space-x-4">
-            <div className="flex items-center">
-              {roundIndex < warRounds - 1 && (
-                <>
-                  {renderCard(null, true, true)}
-                  {renderCard(null, true, true)}
-                  {renderCard(null, true, true)}
-                </>
-              )}
-              {renderCard(gameState.warCards.player[roundIndex * 4], true)}
+        {[...Array(warRounds)].map((_, roundIndex) => {
+          const playerCard = gameState.warCards.player[roundIndex * 4] || null;
+          const opponentCard = gameState.warCards.opponent[roundIndex * 4] || null;
+          
+          return (
+            <div key={roundIndex} className="flex items-center justify-center space-x-4">
+              <div className="flex items-center">
+                {roundIndex < warRounds - 1 && (
+                  <>
+                    {renderCard(null, true, true)}
+                    {renderCard(null, true, true)}
+                    {renderCard(null, true, true)}
+                  </>
+                )}
+                {renderCard(playerCard, true)}
+              </div>
+              <div className="flex items-center">
+                {renderCard(opponentCard, false)}
+                {roundIndex < warRounds - 1 && (
+                  <>
+                    {renderCard(null, false, true)}
+                    {renderCard(null, false, true)}
+                    {renderCard(null, false, true)}
+                  </>
+                )}
+              </div>
             </div>
-            <div className="flex items-center">
-              {renderCard(gameState.warCards.opponent[roundIndex * 4], false)}
-              {roundIndex < warRounds - 1 && (
-                <>
-                  {renderCard(null, false, true)}
-                  {renderCard(null, false, true)}
-                  {renderCard(null, false, true)}
-                </>
-              )}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   };
